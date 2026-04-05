@@ -1,0 +1,28 @@
+[project]
+name = "api-gatekeeper-models"
+version = "0.0.1"
+authors = [
+  { name="Jason Byteforge", email="jmazzahacks@users.noreply.github.com" },
+]
+description = "Shared data models for the API Gatekeeper auth service"
+keywords = ["api", "gatekeeper", "authentication", "models"]
+readme = "README.md"
+requires-python = ">=3.13"
+license = {text = "O'Saasy License"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: Other/Proprietary License",
+    "Operating System :: OS Independent",
+]
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/api_gatekeeper_models"]
+
+[project.urls]
+Homepage = "https://github.com/jmazzahacks/api-gatekeeper-models"
+Issues = "https://github.com/jmazzahacks/api-gatekeeper-models/issues"
