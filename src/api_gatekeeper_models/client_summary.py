@@ -1,7 +1,7 @@
 """
 ClientSummary: redacted wire-format projection of Client for admin listings.
 
-Produced by the docker-backend admin endpoint and consumed by the console
+Produced by the gatekeeper-backend admin endpoint and consumed by the console
 frontend. Never carries shared_secret. api_key is masked.
 """
 from dataclasses import dataclass

@@ -2,7 +2,7 @@
 Shared data models for the API Gatekeeper auth service.
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 from .route import Route, HttpMethod
 from .method_auth import MethodAuth, AuthType
