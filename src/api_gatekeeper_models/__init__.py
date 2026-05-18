@@ -1,8 +1,12 @@
 """
 Shared data models for the API Gatekeeper auth service.
 """
+from importlib.metadata import version
 
-__version__ = "0.4.0"
+# Single source of truth: read from installed package metadata produced by
+# hatchling at build time. pyproject.toml [project].version is canonical;
+# this just exposes it at runtime for `api_gatekeeper_models.__version__`.
+__version__ = version("api-gatekeeper-models")
 
 from .route import Route, HttpMethod
 from .method_auth import MethodAuth, AuthType
