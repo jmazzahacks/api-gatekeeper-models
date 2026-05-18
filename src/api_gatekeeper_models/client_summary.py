@@ -42,6 +42,23 @@ class ClientSummary:
             updated_at=client.updated_at,
         )
 
+    @classmethod
+    def from_dict(cls, data: dict) -> 'ClientSummary':
+        """Reconstruct a ClientSummary from its to_dict() wire format.
+
+        Used by API client libraries (e.g. api-gatekeeper-api-python) to
+        deserialize gatekeeper admin responses back into typed models. Raises
+        KeyError on missing fields and ValueError on unknown status values.
+        """
+        return cls(
+            client_id=str(data['client_id']),
+            client_name=str(data['client_name']),
+            status=ClientStatus(data['status']),
+            api_key_masked=str(data['api_key_masked']),
+            created_at=int(data['created_at']),
+            updated_at=int(data['updated_at']),
+        )
+
     def to_dict(self) -> dict:
         return {
             'client_id': self.client_id,

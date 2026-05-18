@@ -47,6 +47,26 @@ class PermissionSummary:
             created_at=permission.created_at,
         )
 
+    @classmethod
+    def from_dict(cls, data: dict) -> 'PermissionSummary':
+        """Reconstruct a PermissionSummary from its to_dict() wire format.
+
+        Used by API client libraries (e.g. api-gatekeeper-api-python) to
+        deserialize gatekeeper admin responses back into typed models. Raises
+        KeyError on missing fields and ValueError on unknown HTTP methods.
+        """
+        return cls(
+            permission_id=str(data['permission_id']),
+            client_id=str(data['client_id']),
+            client_name=str(data['client_name']),
+            route_id=str(data['route_id']),
+            route_domain=str(data['route_domain']),
+            route_pattern=str(data['route_pattern']),
+            route_service_name=str(data['route_service_name']),
+            allowed_methods=[HttpMethod(m) for m in data['allowed_methods']],
+            created_at=int(data['created_at']),
+        )
+
     def to_dict(self) -> dict:
         return {
             'permission_id': self.permission_id,

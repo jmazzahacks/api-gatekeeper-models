@@ -1,6 +1,6 @@
 [project]
 name = "api-gatekeeper-models"
-version = "0.3.0"
+version = "0.4.0"
 authors = [
   { name="Jason Byteforge", email="jmazzahacks@users.noreply.github.com" },
 ]
@@ -26,3 +26,6 @@ packages = ["src/api_gatekeeper_models"]
 [project.urls]
 Homepage = "https://github.com/jmazzahacks/api-gatekeeper-models"
 Issues = "https://github.com/jmazzahacks/api-gatekeeper-models/issues"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
