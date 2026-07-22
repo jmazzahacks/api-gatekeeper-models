@@ -17,29 +17,32 @@ class ConsoleAdmin:
     Represents a console administrator provisioned from an Aegis account.
 
     Attributes:
-        aegis_user_id: The Aegis-side legacy integer user ID (kept as fallback
-            during the Aegis int->UUID shim; will be dropped after phase-2)
         email: The admin's email address (unique)
         created_at: Unix timestamp of when the admin was provisioned
         updated_at: Unix timestamp of last update
+        aegis_uuid: The Aegis-side user UUID — source of truth for admin
+            identity after Aegis phase-3 (UUID-only contract). New admins
+            provisioned via the phase-3 webhook always carry a UUID.
         admin_id: Local unique identifier (auto-generated if None)
-        aegis_uuid: The Aegis-side user UUID (source of truth after phase-2).
-            Optional during the shim; None on legacy rows until backfilled.
+        aegis_user_id: Aegis's pre-contract integer user id. Kept as
+            Optional read-only historical data on rows provisioned during
+            the phase-1/2 shim. Never populated on new admins after
+            phase-3 because Aegis no longer emits it.
     """
-    aegis_user_id: int
     email: str
     created_at: int
     updated_at: int
+    aegis_uuid: str
     admin_id: Optional[str] = None
-    aegis_uuid: Optional[str] = None
+    aegis_user_id: Optional[int] = None
 
     @classmethod
     def from_dict(cls, data: dict) -> 'ConsoleAdmin':
         """Create a ConsoleAdmin from a database row."""
         return cls(
             admin_id=data['admin_id'],
-            aegis_user_id=data['aegis_user_id'],
-            aegis_uuid=str(data['aegis_uuid']) if data.get('aegis_uuid') else None,
+            aegis_user_id=data.get('aegis_user_id'),
+            aegis_uuid=str(data['aegis_uuid']),
             email=data['email'],
             created_at=data['created_at'],
             updated_at=data['updated_at'],
@@ -59,18 +62,21 @@ class ConsoleAdmin:
     @classmethod
     def create_new(
         cls,
-        aegis_user_id: int,
         email: str,
+        aegis_uuid: str,
         admin_id: Optional[str] = None,
-        aegis_uuid: Optional[str] = None,
     ) -> 'ConsoleAdmin':
-        """Create a new ConsoleAdmin with current timestamp."""
+        """Create a new ConsoleAdmin with current timestamp.
+
+        aegis_user_id is intentionally NOT a parameter here — it's read-only
+        historical data on shim-era rows loaded via from_dict, and never
+        populated on freshly provisioned admins after Aegis phase-3.
+        """
         now = int(time.time())
         return cls(
-            aegis_user_id=aegis_user_id,
             email=email,
             created_at=now,
             updated_at=now,
-            admin_id=admin_id,
             aegis_uuid=aegis_uuid,
+            admin_id=admin_id,
         )
