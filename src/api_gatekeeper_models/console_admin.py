@@ -24,24 +24,18 @@ class ConsoleAdmin:
             identity after Aegis phase-3 (UUID-only contract). New admins
             provisioned via the phase-3 webhook always carry a UUID.
         admin_id: Local unique identifier (auto-generated if None)
-        aegis_user_id: Aegis's pre-contract integer user id. Kept as
-            Optional read-only historical data on rows provisioned during
-            the phase-1/2 shim. Never populated on new admins after
-            phase-3 because Aegis no longer emits it.
     """
     email: str
     created_at: int
     updated_at: int
     aegis_uuid: str
     admin_id: Optional[str] = None
-    aegis_user_id: Optional[int] = None
 
     @classmethod
     def from_dict(cls, data: dict) -> 'ConsoleAdmin':
         """Create a ConsoleAdmin from a database row."""
         return cls(
             admin_id=data['admin_id'],
-            aegis_user_id=data.get('aegis_user_id'),
             aegis_uuid=str(data['aegis_uuid']),
             email=data['email'],
             created_at=data['created_at'],
@@ -52,7 +46,6 @@ class ConsoleAdmin:
         """Convert to a dictionary for storage or serialization."""
         return {
             'admin_id': self.admin_id,
-            'aegis_user_id': self.aegis_user_id,
             'aegis_uuid': self.aegis_uuid,
             'email': self.email,
             'created_at': self.created_at,
@@ -66,12 +59,7 @@ class ConsoleAdmin:
         aegis_uuid: str,
         admin_id: Optional[str] = None,
     ) -> 'ConsoleAdmin':
-        """Create a new ConsoleAdmin with current timestamp.
-
-        aegis_user_id is intentionally NOT a parameter here — it's read-only
-        historical data on shim-era rows loaded via from_dict, and never
-        populated on freshly provisioned admins after Aegis phase-3.
-        """
+        """Create a new ConsoleAdmin with current timestamp."""
         now = int(time.time())
         return cls(
             email=email,

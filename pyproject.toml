@@ -1,6 +1,6 @@
 [project]
 name = "api-gatekeeper-models"
-version = "0.6.0"
+version = "0.7.0"
 authors = [
   { name="Jason Byteforge", email="jmazzahacks@users.noreply.github.com" },
 ]
